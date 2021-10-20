@@ -18,6 +18,11 @@ const blogSchema = new Schema({
   body: {
     type: String,
     required: true
+  },
+  author: [],
+  email: {
+    type: String,
+    required: true
   }
 }, { timestamps: true });
 

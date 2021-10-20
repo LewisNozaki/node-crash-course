@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require("mongoose");
 const Blog = require("./models/blog");
+const Author = require("./models/author");
 const PORT = 3000;
 
 // express app
@@ -37,7 +38,8 @@ app.get("/add-blog", (req, res) => {
   const blog = new Blog({
     title: "Luigi Buys a Haunted Mansion.. Again",
     snippet: "You won't expected what's inside...",
-    body: "Luigi recently bought a mansion for a great price. After venturing inside he found that there were unexpected guests living there. Living, being the keyword... They were all ghosts! Luigi being the money saver that he is intends to take care of the problem himself. Perhaps he is a little in over his head?"
+    body: "Luigi recently bought a mansion for a great price. After venturing inside he found that there were unexpected guests living there. Living, being the keyword... They were all ghosts! Luigi being the money saver that he is intends to take care of the problem himself. Perhaps he is a little in over his head?",
+    email: "luigi@mario.com"
   });
 
   blog.save()
@@ -58,6 +60,40 @@ app.get("/single-blog", (req, res) => {
       .then(results => res.send(results))
       .catch(err => console.log(err));
 })
+
+// testing
+app.get("/update", async (req, res) => {
+  try {
+    const author = await new Author({ firstName: "Kenji", lastName: "Nozaki"});
+    
+    const results = await Blog.findOneAndUpdate(
+      { email: "luigi@mario.com" }, 
+      { $push: {
+        author: author
+      }},
+      { new: true }
+      );
+    
+    res.send(results);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// testing 2
+app.get("/find", async (req, res) => {
+  try {
+    const author = await new Author({ firstName: "Jeffrey", lastName: "Nozaki"});
+    
+    const results = await Blog.findOne({ email: "luigi@mario.com" }).author.push(author);
+
+    Blog.save();
+    
+    res.send(results);
+  } catch (err) {
+    res.send(err);
+  }
+});
 
 
 
