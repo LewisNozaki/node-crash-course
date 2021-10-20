@@ -2,16 +2,15 @@
   "name": "crash-course",
   "version": "1.0.0",
   "description": "a node crash course",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iamshaunjp/node-crash-course.git"
   },
-  "author": "net ninja",
+  "author": "Kenji Nozaki",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/iamshaunjp/node-crash-course/issues"
@@ -21,6 +20,10 @@
     "ejs": "^3.1.2",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
+    "mongoose": "^6.0.11",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
   }
 }

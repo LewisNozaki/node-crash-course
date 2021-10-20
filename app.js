@@ -1,11 +1,24 @@
+// Imports
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require("mongoose");
+const PORT = 3000;
 
 // express app
 const app = express();
 
+// Connects to MongoDB Atlas
+const dbURI = "mongodb+srv://kenji:07011990@cluster0.ydpsu.mongodb.net/MongoDB-Tutorial?retryWrites=true&w=majority";
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(result => {
+    console.log("connected to MongoDB Atlas");
+    app.listen(PORT, () => console.log("server running on port", PORT));
+  })
+  .catch(err => console.log(err));
+
 // listen for requests
-app.listen(3000);
+// const PORT = 3000;
+// app.listen(PORT, () => console.log("server running on port", PORT));
 
 // register view engine
 app.set('view engine', 'ejs');
