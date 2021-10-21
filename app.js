@@ -81,18 +81,19 @@ app.get("/update", async (req, res) => {
 });
 
 // testing 2
-app.get("/find", async (req, res) => {
-  try {
-    const author = await new Author({ firstName: "Jeffrey", lastName: "Nozaki"});
-    
-    const results = await Blog.findOne({ email: "luigi@mario.com" }).author.push(author);
+app.get("/find", (req, res) => {
+  const id = "616fc9de28f6d15d26559ffe";
 
-    Blog.save();
-    
-    res.send(results);
-  } catch (err) {
-    res.send(err);
-  }
+  Blog.findById(id)
+    .then(result => {
+      let authorIndex = result.author.findIndex(item => item.firstName === "Ivy");
+      
+      result.author[authorIndex].firstName = "Butters";
+
+      return result.save();
+    })
+    .then(result => res.send(result))
+    .catch(err => console.log(err));
 });
 
 
