@@ -5,6 +5,18 @@ const mongoose = require("mongoose");
 // This creates a constructor function
 const Schema = mongoose.Schema;
 
+const reqStr = {
+  type: String,
+  required: true
+}
+
+const messageSchema = new Schema({
+  userId: reqStr,
+  text: reqStr
+},
+  { timestamps: true }
+);
+
 // Create a new instance of a Schema
 const blogSchema = new Schema({
   title: {
@@ -23,7 +35,8 @@ const blogSchema = new Schema({
   email: {
     type: String,
     required: true
-  }
+  },
+  messages: [messageSchema]
 }, { timestamps: true });
 
 

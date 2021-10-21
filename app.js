@@ -61,8 +61,8 @@ app.get("/single-blog", (req, res) => {
       .catch(err => console.log(err));
 })
 
-// testing
-app.get("/update", async (req, res) => {
+// testing - push using findOneAndUpdate & $push
+app.get("/test", async (req, res) => {
   try {
     const author = await new Author({ firstName: "Kenji", lastName: "Nozaki"});
     
@@ -80,8 +80,8 @@ app.get("/update", async (req, res) => {
   }
 });
 
-// testing 2
-app.get("/find", (req, res) => {
+// testing 2 - modify with regular promises
+app.get("/test2", (req, res) => {
   const id = "616fc9de28f6d15d26559ffe";
 
   Blog.findById(id)
@@ -90,6 +90,8 @@ app.get("/find", (req, res) => {
       
       result.author[authorIndex].firstName = "Butters";
 
+      result.markModified("author");
+
       return result.save();
     })
     .then(result => res.send(result))
@@ -97,13 +99,67 @@ app.get("/find", (req, res) => {
 });
 
 
+// testing 3 - push with async await
+app.get("/test3", async (req, res) => {
+  const id = "616fc9de28f6d15d26559ffe";
+
+  try {
+    const blog = await Blog.findById(id);
+
+    const person = await new Author({ firstName: "Jeffrey", lastName: "Nozaki" });
+
+    blog.author.push(person);
+
+    const result = await blog.save();
+
+    res.send(result);
+  } catch (err) {
+    res.send(err);
+  }
+});
 
 
+// testing 4 - modify with async await
+app.get("/test4", async (req, res) => {
+  const id = "616fc9de28f6d15d26559ffe";
 
+  try {
+    const blog = await Blog.findById(id);
 
+    let authIndex = await blog.author.findIndex(item => item.firstName === "Kenji");
 
+    blog.author[authIndex].firstName = "Lewis";
 
+    blog.markModified("author");
 
+    const result = await blog.save();
+
+    res.send(result);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// test 5 - new entry
+app.get("/test5", async (req, res) => {
+  try {
+    const blog = await new Blog({
+      title: "Yet again, Bowser kidnaps Peach",
+      snippet: "I mean, really...",
+      body: "You would think that Bowser would reconsider his life choices. But, here we are again.",
+      email: "bowser@mario.com",
+      messages: [
+        { userId: "Baby Bowser", text: "That's my dad!" }
+      ]
+    });
+
+    const result = await blog.save();
+
+    res.send(result);
+  } catch (err) {
+    res.send(err)
+  }
+});
 
 
 
