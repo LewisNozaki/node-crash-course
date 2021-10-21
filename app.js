@@ -4,16 +4,23 @@ const morgan = require('morgan');
 const mongoose = require("mongoose");
 const Blog = require("./models/blog");
 const Author = require("./models/author");
-const PORT = 3000;
+
+const path = require("path");
+const rootDir = require("./helpers/path-helper");
+
+require("dotenv").config({ path: path.join(rootDir, "secure", ".env") });
+
+const PORT = process.env.PORT || 3000;
 
 // express app
 const app = express();
 
 // Connects to MongoDB Atlas
-const dbURI = "mongodb+srv://kenji:07011990@cluster0.ydpsu.mongodb.net/MongoDB-Tutorial?retryWrites=true&w=majority";
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+// const dbURI = "mongodb+srv://kenji:07011990@cluster0.ydpsu.mongodb.net/MongoDB-Tutorial?retryWrites=true&w=majority";
+mongoose.connect(process.env.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => {
     console.log("connected to MongoDB Atlas");
+    
     app.listen(PORT, () => console.log("server running on port", PORT));
   })
   .catch(err => console.log(err));
